@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  web:
+    build:
+      context: .
+      args:
+        RUBY_VERSION: 2.7.0
+        APP_PATH: /app
+    command: bundle exec rails s -b 0.0.0.0
+    volumes:
+      - .:/app:cached
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+  db:
+    image: mysql:5.7.27
+    volumes:
+      - db-volume:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+volumes:
+  db-volume:
