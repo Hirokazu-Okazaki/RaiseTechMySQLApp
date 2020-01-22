@@ -40,10 +40,10 @@ RUN yarn install --check-files
 
 # productionの設定
 RUN if [ "${RAILS_ENV}" = "production" ]; then \
-    # puma.sockを配置するディレクトリを作成
+    # puma.sockを配置するディレクトリを作成 \
     mkdir -p tmp/sockets; \
-    # productionなのでPrecompileする(不要?)
-    #bundle exec rails assets:precompile; \
+    # productionなのでPrecompileする \
+    bundle exec rails assets:precompile; \
 fi
 
 # entrypoint
