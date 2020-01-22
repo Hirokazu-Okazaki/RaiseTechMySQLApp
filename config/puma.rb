@@ -10,7 +10,11 @@ threads min_threads_count, max_threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-port        ENV.fetch("PORT") { 3000 }
+rails_env = ENV.fetch("RAILS_ENV") { "development" }
+if rails_env == "development"
+    # 開発環境ではNginxを使用せず3000番ポートで起動
+    port        ENV.fetch("PORT") { 3000 }    
+end
 
 # Specifies the `environment` that Puma will run in.
 #
@@ -36,3 +40,11 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+
+if rails_env == "production"
+    # 本番環境ではNginxを使用
+    app_root = File.expand_path("../..", __FILE__)
+    bind "unix://#{app_root}/tmp/sockets/puma.sock"
+
+    stdout_redirect "#{app_root}/log/puma.stdout.log", "#{app_root}/log/puma.stderr.log", true
+end
