@@ -39,6 +39,9 @@ COPY . .
 RUN yarn install --check-files
 RUN yarn upgrade
 
+RUN rm config/credentials.yml.enc
+RUN EDITOR=vi rails credentials:edit
+
 # productionの設定
 RUN if [ "${RAILS_ENV}" = "production" ]; then \
     # puma.sockを配置するディレクトリを作成 \
