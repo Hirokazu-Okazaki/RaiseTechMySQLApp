@@ -59,8 +59,8 @@ docker-compose -f docker-compose.development.yml up --build -d
 # が表示された場合、EC2インスタンスに再接続してください
 
 # MySQL(Local)のテーブルを作成
-docker-compose -f docker-compose.development.yml exec web bundle exec rails db:create
-docker-compose -f docker-compose.development.yml exec web bundle exec rails db:migrate
+docker exec -it $(docker-compose -f docker-compose.development.yml ps -q app) bundle exec rails db:create
+docker exec -it $(docker-compose -f docker-compose.development.yml ps -q app) bundle exec rails db:migrate
 
 # SSHでEC2に接続している場合、ポート番号3000, 3306をLocalForwardしてください
 # http://localhost:3000/users でアクセスできます
@@ -114,7 +114,7 @@ docker-compose -f docker-compose.production.yml up --build -d
 # ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
 # が表示された場合、EC2インスタンスに再接続してください
 
-# MySQL(Local)のテーブルを作成
+# MySQL(RDS)のテーブルを作成
 docker exec -it $(docker-compose -f docker-compose.production.yml ps -q app) bundle exec rails db:create
 docker exec -it $(docker-compose -f docker-compose.production.yml ps -q app) bundle exec rails db:migrate
 

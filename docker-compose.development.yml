@@ -5,15 +5,15 @@ services:
       context: .
       args:
         RUBY_VERSION: 2.7.0
-        APP_PATH: /app
+        APP_PATH: /approot
         RAILS_ENV: development
         RACK_ENV: development
     command: bundle exec rails s -b 0.0.0.0
     volumes:
-      - .:/app:cached
-      - public-volume:/app/public
-      - tmp-volume:/app/tmp
-      - log-volume:/app/log
+      - .:/approot:cached
+      - public-volume:/approot/public
+      - tmp-volume:/approot/tmp
+      - log-volume:/approot/log
     ports:
       - 3000:3000
     depends_on:
