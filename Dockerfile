@@ -37,6 +37,7 @@ RUN bundle install
 COPY . .
 # yarnをインストール
 RUN yarn install --check-files
+RUN yarn upgrade
 
 # productionの設定
 RUN if [ "${RAILS_ENV}" = "production" ]; then \
