@@ -43,24 +43,25 @@ git clone https://github.com/Hirokazu-Okazaki/RaiseTechMySQLApp.git
 # リポジトリに移動
 cd RaiseTechMySQLApp
 
-# credentialsファイルの再作成
-docker-compose -f docker-compose.production.yml run app bash
-rm config/credentials.yml.enc
-EDITOR=vi rails credentials:edit
-exit
+# コンテナをビルド
+docker-compose -f docker-compose.development.yml build --no-cache
+
+# ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+# が表示された場合、EC2インスタンスに再接続してください
+
+# credentialsの再作成
+docker-compose -f docker-compose.development.yml run app rm config/credentials.yml.enc
+docker-compose -f docker-compose.development.yml run -e EDITOR="vi" app bundle exec rails credentials:edit
 
 # credentialsファイルのユーザーを変更
 sudo chown -R $USER:$USER .
 
 # コンテナを起動
-docker-compose -f docker-compose.development.yml up --build -d
-
-# ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
-# が表示された場合、EC2インスタンスに再接続してください
+docker-compose -f docker-compose.development.yml up -d
 
 # MySQL(Local)のテーブルを作成
-docker exec -it $(docker-compose -f docker-compose.development.yml ps -q app) bundle exec rails db:create
-docker exec -it $(docker-compose -f docker-compose.development.yml ps -q app) bundle exec rails db:migrate
+docker-compose -f docker-compose.development.yml run app bundle exec rails db:create
+docker-compose -f docker-compose.development.yml run app bundle exec rails db:migrate
 
 # SSHでEC2に接続している場合、ポート番号3000, 3306をLocalForwardしてください
 # http://localhost:3000/users でアクセスできます
@@ -99,24 +100,28 @@ vi containers/nginx/app.conf
 # ↓
 # server_name www.your_domain;
 
-# credentialsファイルの再作成
-docker-compose -f docker-compose.production.yml run app bash
-rm config/credentials.yml.enc
-EDITOR=vi rails credentials:edit
-exit
+# コンテナをビルド
+docker-compose -f docker-compose.production.yml build --no-cache
+
+# credentialsの再作成
+docker-compose -f docker-compose.production.yml run app rm config/credentials.yml.enc
+docker-compose -f docker-compose.production.yml run -e EDITOR="vi" app bundle exec rails credentials:edit
+
+# precompile
+docker-compose -f docker-compose.production.yml run app bundle exec rails assets:precompile
 
 # credentialsファイルのユーザーを変更
 sudo chown -R $USER:$USER .
 
 # コンテナを起動
-docker-compose -f docker-compose.production.yml up --build -d
+docker-compose -f docker-compose.production.yml up -d
 
 # ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
 # が表示された場合、EC2インスタンスに再接続してください
 
 # MySQL(RDS)のテーブルを作成
-docker exec -it $(docker-compose -f docker-compose.production.yml ps -q app) bundle exec rails db:create
-docker exec -it $(docker-compose -f docker-compose.production.yml ps -q app) bundle exec rails db:migrate
+docker-compose -f docker-compose.production.yml run app bundle exec rails db:create
+docker-compose -f docker-compose.production.yml run app bundle exec rails db:migrate
 
 # https://www.your_domainでアクセスできます
 

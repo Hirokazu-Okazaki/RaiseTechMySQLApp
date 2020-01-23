@@ -36,18 +36,12 @@ RUN bundle install
 # カレントディレクトリの内容をコンテナへコピー
 COPY . .
 # yarnをインストール
-RUN yarn install --check-files
 RUN yarn upgrade
-
-RUN rm config/credentials.yml.enc
-RUN EDITOR=vi rails credentials:edit
 
 # productionの設定
 RUN if [ "${RAILS_ENV}" = "production" ]; then \
     # puma.sockを配置するディレクトリを作成 \
     mkdir -p tmp/sockets; \
-    # productionなのでPrecompileする \
-    bundle exec rails assets:precompile; \
 fi
 
 # entrypoint
