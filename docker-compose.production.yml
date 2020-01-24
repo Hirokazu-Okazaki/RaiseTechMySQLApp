@@ -12,7 +12,7 @@ services:
     command: bundle exec puma -C config/puma.rb
     volumes:
       - .:/approot:cached
-      - public-volume:/approot/public
+      - ./log:/approot/log:cached
       - tmp-volume:/approot/tmp
       - log-volume:/approot/log
     tty: true
@@ -30,4 +30,3 @@ services:
 volumes:
   public-volume:
   tmp-volume:
-  log-volume:

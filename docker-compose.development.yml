@@ -11,9 +11,9 @@ services:
     command: bundle exec rails s -b 0.0.0.0
     volumes:
       - .:/approot:cached
+      - ./log:/approot/log:cached
       - public-volume:/approot/public
       - tmp-volume:/approot/tmp
-      - log-volume:/approot/log
     ports:
       - 3000:3000
     depends_on:
@@ -31,5 +31,4 @@ services:
 volumes:
   public-volume:
   tmp-volume:
-  log-volume:
   db-volume:
