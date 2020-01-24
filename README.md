@@ -15,7 +15,7 @@ RaiseTech講義用のサンプルアプリケーション
 
 # Setup
 EC2インスタンス上に環境構築を行う手順を記載する。
-※t2.smallではメモリ不足なのでt2.small以上が必須
+※t2.microではメモリ不足なのでt2.small以上が必須
 ```sh
 # yumのパッケージをアップデート
 sudo yum update -y
