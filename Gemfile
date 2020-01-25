@@ -43,6 +43,7 @@ group :development do
   # Debug
   gem 'ruby-debug-ide'
   gem 'debase'
+  gem 'pry-byebug'
 end
 
 group :test do

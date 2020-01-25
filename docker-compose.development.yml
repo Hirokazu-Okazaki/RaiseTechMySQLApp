@@ -7,7 +7,7 @@ services:
         RUBY_VERSION: 2.7.0
         APP_PATH: /approot
         RAILS_ENV: development
-    command: bundle exec rails s -b 0.0.0.0
+    command: bundle exec rdebug-ide --host 0.0.0.0 --port 1234 --dispatcher-port 26162 -- bin/rails s -b 0.0.0.0
     volumes:
       - .:/approot:cached
       - ./log:/approot/log:cached
@@ -15,6 +15,8 @@ services:
       - tmp-volume:/approot/tmp
     ports:
       - 3000:3000
+      - 1234:1234
+      - 26162:26162
     depends_on:
       - db
     tty: true
