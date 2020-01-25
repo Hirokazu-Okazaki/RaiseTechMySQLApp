@@ -7,7 +7,6 @@ services:
         RUBY_VERSION: 2.7.0
         APP_PATH: /approot
         RAILS_ENV: production
-        RACK_ENV: production
     env_file: .env
     command: bundle exec puma -C config/puma.rb
     volumes:

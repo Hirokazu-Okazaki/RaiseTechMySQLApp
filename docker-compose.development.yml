@@ -7,7 +7,6 @@ services:
         RUBY_VERSION: 2.7.0
         APP_PATH: /approot
         RAILS_ENV: development
-        RACK_ENV: development
     command: bundle exec rails s -b 0.0.0.0
     volumes:
       - .:/approot:cached
