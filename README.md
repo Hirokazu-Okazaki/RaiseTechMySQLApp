@@ -96,7 +96,7 @@ vi .env
 vi containers/nginx/app.conf
 
 # ドメインもしくはIPを指定
-# server_name www.raisetechokazaki.tk;
+# server_name www.raisetechportfolio.tk;
 # ↓
 # server_name www.your_domain;
 
