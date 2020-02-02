@@ -487,7 +487,7 @@ resource aws_security_group_rule outbound_ec2 {
 
 # EC2
 resource aws_instance app_1a {
-  ami                     = "ami-05a4eb30c5863f53b"
+  ami                     = "ami-03221ff557052673d"
   availability_zone       = "ap-northeast-1a"
   subnet_id               = aws_subnet.public_1a.id
   instance_type           = "t2.small"
