@@ -77,7 +77,7 @@ resource aws_internet_gateway this {
   }
 }
 
-# RouteTable
+# InternetGateway RouteTable
 resource aws_route_table public {
   depends_on  = [aws_internet_gateway.this]
   vpc_id      = aws_vpc.this.id
@@ -92,7 +92,16 @@ resource aws_route_table public {
   }
 }
 
-# RouteTableAssociation
+resource aws_route_table private {
+  depends_on  = [aws_vpc.this]
+  vpc_id      = aws_vpc.this.id
+
+  tags = {
+    Name = "tf.aws_route_table.private"
+  }
+}
+
+# InternetGateway RouteTableAssociation
 resource aws_route_table_association public_1a {
   depends_on      = [aws_subnet.public_1a]
   subnet_id       = aws_subnet.public_1a.id
@@ -103,6 +112,50 @@ resource aws_route_table_association public_1c {
   depends_on      = [aws_subnet.public_1c]
   subnet_id       = aws_subnet.public_1c.id
   route_table_id  = aws_route_table.public.id
+}
+
+resource aws_route_table_association private_1a {
+  depends_on      = [aws_subnet.private_1a]
+  subnet_id       = aws_subnet.private_1a.id
+  route_table_id  = aws_route_table.private.id
+}
+
+resource aws_route_table_association private_1c {
+  depends_on      = [aws_subnet.private_1c]
+  subnet_id       = aws_subnet.private_1c.id
+  route_table_id  = aws_route_table.private.id
+}
+
+# EndPoint
+resource aws_vpc_endpoint s3 {
+  depends_on    = [aws_vpc.this]
+  vpc_id        = aws_vpc.this.id
+  service_name  = "com.amazonaws.ap-northeast-1.s3"
+
+  tags = {
+    Name = "tf.aws_vpc_endpoint.s3"
+  }
+}
+
+# EndPoint RouteTableAssociation
+resource aws_vpc_endpoint_route_table_association public_s3 {
+  depends_on      = [
+    aws_vpc.this,
+    aws_route_table.public,
+  ]
+
+  vpc_endpoint_id = aws_vpc_endpoint.s3.id
+  route_table_id  = aws_route_table.public.id
+}
+
+resource aws_vpc_endpoint_route_table_association private_s3 {
+  depends_on      = [
+    aws_vpc.this,
+    aws_route_table.private,
+  ]
+
+  vpc_endpoint_id = aws_vpc_endpoint.s3.id
+  route_table_id  = aws_route_table.private.id
 }
 
 # SecurityGroup ALB
