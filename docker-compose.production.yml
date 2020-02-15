@@ -27,12 +27,6 @@ services:
     depends_on:
       - app
     restart: always
-  terraform:
-    image: hashicorp/terraform:0.12.20
-    volumes:
-      - ./terraform:/terraformroot
-    working_dir: "/terraformroot"
-    env_file: .env
 volumes:
   public-volume:
   tmp-volume:
